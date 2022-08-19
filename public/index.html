@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h1> 
+            Chat App
+        </h1>
+    </head>
+    <body>
+        <form id="form">
+            <input name="message" id="message" type="text" placeholder="Send a message">
+            <button id="send" type="submit">Send Message</button>
+        </form>
+        <!-- socket.io.js is socket.io for client side, chat.js has access to socket.io.js -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/chat.js "></script>
+    </body>
+</html>
+
+<style>
+    html {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
