@@ -36,6 +36,11 @@ io.on('connection', (socket) => {
         io.emit('message', message)
     })
 
+    // Receiving coordinates from client, transform it into google maps link, then send link back to all connections
+    socket.on('sendLocation', (coords) => {
+        io.emit("message", `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+    })
+
     // On a user disconnection, send message to all other users
     socket.on('disconnect', () => {
         io.emit('message', 'A user has left')
