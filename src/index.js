@@ -28,9 +28,17 @@ io.on('connection', (socket) => {
     // Sending Welcome message to new connection (client)
     socket.emit('message', "Welcome!")
 
+    // Broadcast sends data to all connections except the one that sends the data
+    socket.broadcast.emit('message', 'A new user has joined.')
+
     // Receiving event with message value from client and emitting it back to all connections
     socket.on('sendMessage', (message) => {
         io.emit('message', message)
+    })
+
+    // On a user disconnection, send message to all other users
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left')
     })
 })
 
