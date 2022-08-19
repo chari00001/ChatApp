@@ -16,7 +16,13 @@ document.getElementById('form')
         const message = e.target.elements.message.value
 
         // Emitting event to server with message value
-        socket.emit('sendMessage', message)
+        socket.emit('sendMessage', message, (message) => {
+            if(error){
+                return console.log(error);
+            }
+            // Acknowledgement message
+            console.log('Message Delivered.');
+        })
     })
 
 // Location sharing field selected here and added click event handler 
@@ -33,6 +39,9 @@ document.getElementById('send-location')
             socket.emit('sendLocation', {
                 latitude,
                 longitude
+            },
+            () => {
+               console.log('Location shared.'); 
             })
         }) 
     })

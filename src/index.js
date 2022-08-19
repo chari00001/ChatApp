@@ -5,6 +5,7 @@ const http = require('http')
 // Importing npm packages
 const express = require('express')
 const socketio = require('socket.io')
+const Filter = require('bad-words')
 
 // Creating app with express and using it in creating server via by http request
 const app = express()
@@ -32,13 +33,22 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', 'A new user has joined.')
 
     // Receiving event with message value from client and emitting it back to all connections
-    socket.on('sendMessage', (message) => {
+    socket.on('sendMessage', (message, callback) => {
+        const filter = new Filter()
+
+        if(filter.isProfane(message)){
+          return callback('Watch your profanity.')  
+        }
         io.emit('message', message)
+        // Acknowledgement callback
+        callback()
     })
 
     // Receiving coordinates from client, transform it into google maps link, then send link back to all connections
-    socket.on('sendLocation', (coords) => {
+    socket.on('sendLocation', (coords, callback) => {
         io.emit("message", `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        // Acknowledgement callback
+        callback()
     })
 
     // On a user disconnection, send message to all other users
