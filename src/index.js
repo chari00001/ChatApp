@@ -8,7 +8,7 @@ const socketio = require('socket.io')
 const Filter = require('bad-words')
 
 // Importing utilities
-const { generateMessage } = require('./utils/messages')
+const { generateMessage, generateLocationMessage } = require('./utils/messages')
 
 // Creating app with express and using it in creating server via by http request
 const app = express()
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 
     // Receiving coordinates from client, transform it into google maps link, then send link back to all connections
     socket.on('sendLocation', (coords, callback) => {
-        io.emit("locationMessage", `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        io.emit("locationMessage", generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
         // Acknowledgement callback
         callback()
     })

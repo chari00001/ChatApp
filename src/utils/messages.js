@@ -1,4 +1,4 @@
-// Reformatting messages as an object of text and timestamp
+// Reformatting messages and locations as an object of text and timestamp
 const generateMessage = (text) => {
     return {
         text,
@@ -6,7 +6,15 @@ const generateMessage = (text) => {
     }
 }
 
+const generateLocationMessage = (url) => {
+    return {
+        url,
+        createdAt: new Date().getTime()
+    }
+}
+
 // Exporting function
 module.exports = {
-    generateMessage
+    generateMessage,
+    generateLocationMessage
 }
