@@ -6,10 +6,19 @@ const $messageForm = document.getElementById('form')
 const $messageFormInput = document.getElementById('message')
 const $messageFormButton = document.getElementById('send')
 const $locationSendButton = document.getElementById('send-location')
+const $messages = document.getElementById('messages')
+
+// Selecting message template
+const messageTemplate = document.getElementById('message-template').innerHTML
 
 // Receiving message event with message variable, then printing it to the console
 socket.on('message', (message) => {
     console.log(message);
+    // Rendering message template using Mustache, sending dynamic message value to it, then adding it to messages
+    const html = Mustache.render(messageTemplate, {
+        message
+    })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // Adding submit event listener to form element
@@ -24,7 +33,7 @@ $messageForm.addEventListener('submit', (e) => {
     const message = e.target.elements.message.value
 
     // Emitting event to server with message value
-    socket.emit('sendMessage', message, (message) => {
+    socket.emit('sendMessage', message, (error) => {
         // Re-enabling button, emptying it and refocusing to input
         $messageFormButton.removeAttribute('disabled')
         $messageFormInput.value = ''
