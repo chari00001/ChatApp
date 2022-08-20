@@ -22,10 +22,17 @@
         <button id="send-location">Send Location</button>
 
 
-        <!-- Rendering dynamic messages with string interpolation using Mustache library -->
+        <!-- Rendering dynamic messages -->
         <script id="message-template" type="text/html">
             <div>
                 <p>{{ message }}</p>
+            </div>
+        </script>
+
+        <!-- Rendering location messages -->
+        <script id="location-template">
+            <div>
+                <p><a href="{{ url }}" target="_blank">Location</a></p>
             </div>
         </script>
 

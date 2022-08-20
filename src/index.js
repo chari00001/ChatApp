@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 
     // Receiving coordinates from client, transform it into google maps link, then send link back to all connections
     socket.on('sendLocation', (coords, callback) => {
-        io.emit("message", `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        io.emit("locationMessage", `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
         // Acknowledgement callback
         callback()
     })

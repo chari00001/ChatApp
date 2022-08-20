@@ -8,8 +8,9 @@ const $messageFormButton = document.getElementById('send')
 const $locationSendButton = document.getElementById('send-location')
 const $messages = document.getElementById('messages')
 
-// Selecting message template
+// Selecting message and location templates
 const messageTemplate = document.getElementById('message-template').innerHTML
+const locationTemplate = document.getElementById('location-template').innerHTML
 
 // Receiving message event with message variable, then printing it to the console
 socket.on('message', (message) => {
@@ -17,6 +18,15 @@ socket.on('message', (message) => {
     // Rendering message template using Mustache, sending dynamic message value to it, then adding it to messages
     const html = Mustache.render(messageTemplate, {
         message
+    })
+    $messages.insertAdjacentHTML('beforeend', html)
+})
+
+// Rendering location with mustache, adding setting href to url, then adding it back to messages 
+socket.on('locationMessage', (url) => {
+    console.log(url);
+    const html = Mustache.render(locationTemplate, {
+        url
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
