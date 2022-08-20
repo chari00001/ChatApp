@@ -16,8 +16,10 @@ const locationTemplate = document.getElementById('location-template').innerHTML
 socket.on('message', (message) => {
     console.log(message);
     // Rendering message template using Mustache, sending dynamic message value to it, then adding it to messages
+    // createdAt has a value of H:mm formatted time
     const html = Mustache.render(messageTemplate, {
-        message
+        message: message.text,
+        createdAt: moment(message.createdAt).format('H:mm')
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
