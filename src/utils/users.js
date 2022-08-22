@@ -34,9 +34,9 @@ const addUser = ({ id, username, room }) => {
 // Removes the user by id
 const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id)
-    index !== -1
-        ? users.splice(index, 1)[0]
-        : console.log('User does not exist!');
+    if(index !== -1){
+        return users.splice(index, 1)[0]
+    }
 }
 
 // Gets user by id

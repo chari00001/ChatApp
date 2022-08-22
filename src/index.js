@@ -9,6 +9,7 @@ const Filter = require('bad-words')
 
 // Importing utilities
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
 
 // Creating app with express and using it in creating server via by http request
 const app = express()
@@ -32,15 +33,24 @@ io.on('connection', (socket) => {
     console.log('New WebSocket connection!');
 
     // Receive join event with required informations
-    socket.on('join', ({ username, room }) => {
+    socket.on('join', ({ username, room }, callback) => {
+        // Add user that joined with socket id
+        const { error, user } = addUser({ id: socket.id, username, room })
+        
+        if(error){
+            return callback(error)
+        }
+
         // Connect to a specific room
-        socket.join(room)
+        socket.join(user.room)
 
         // Sending Welcome message to new connection (client)
         socket.emit('message', generateMessage('Welcome!'))
 
         // Broadcast sends data to specific room except the one that sends the data
-        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+        socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} has joined!`))
+
+        callback()
     })
 
     // Receiving event with message value from client and emitting it back to all connections
@@ -64,7 +74,11 @@ io.on('connection', (socket) => {
 
     // On a user disconnection, send message to all other users
     socket.on('disconnect', () => {
-        io.emit('message', generateMessage('A user has left'))
+        // On disconnection, remove user and if there is a removed user send a message to all connections
+        const user = removeUser(socket.id)
+        if (user) {
+            io.to(user.room).emit('message', generateMessage(`${user.username} has left.`))
+        }
     })
 })
 

@@ -89,4 +89,10 @@ $locationSendButton.addEventListener('click', (e) => {
 })
 
 // Send a join event to server with user name and room name from join page
-socket.emit('join', { username, room })
+socket.emit('join', { username, room }, (error) => {
+    // If there is an error redirect to join page
+    if(error){
+        alert(error)
+        location.href = '/'
+    }
+})
