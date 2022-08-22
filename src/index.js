@@ -29,11 +29,17 @@ app.use(express.static(publicDir))
 io.on('connection', (socket) => {
     console.log('New WebSocket connection!');
 
-    // Sending Welcome message to new connection (client)
-    socket.emit('message', generateMessage('Welcome!'))
+    // Receive join event with required informations
+    socket.on('join', ({ username, room }) => {
+        // Connect to a specific room
+        socket.join(room)
 
-    // Broadcast sends data to all connections except the one that sends the data
-    socket.broadcast.emit('message', generateMessage('A new user has joined!'))
+        // Sending Welcome message to new connection (client)
+        socket.emit('message', generateMessage('Welcome!'))
+
+        // Broadcast sends data to specific room except the one that sends the data
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+    })
 
     // Receiving event with message value from client and emitting it back to all connections
     socket.on('sendMessage', (message, callback) => {

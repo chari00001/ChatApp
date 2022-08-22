@@ -12,6 +12,9 @@ const $messages = document.getElementById('messages')
 const messageTemplate = document.getElementById('message-template').innerHTML
 const locationTemplate = document.getElementById('location-template').innerHTML
 
+// Getting query string, parsing it and destructuring as username and room
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true } )
+
 // Receiving message event with message variable, then printing it to the console
 socket.on('message', (message) => {
     console.log(message);
@@ -84,3 +87,6 @@ $locationSendButton.addEventListener('click', (e) => {
         })
     }) 
 })
+
+// Send a join event to server with user name and room name from join page
+socket.emit('join', { username, room })
