@@ -21,6 +21,8 @@ const io = socketio(server)
 const port = process.env.PORT || 8080
 const publicDir = path.join(__dirname, '../public')
 
+/**************** SERVER *****************/
+
 // Setting up static path for express
 app.use(express.static(publicDir))
 
