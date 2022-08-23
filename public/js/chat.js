@@ -21,6 +21,7 @@ socket.on('message', (message) => {
     // Rendering message template using Mustache, sending dynamic message value to it, then adding it to messages
     // createdAt has a value of H:mm formatted time
     const html = Mustache.render(messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('H:mm')
     })
@@ -31,6 +32,7 @@ socket.on('message', (message) => {
 socket.on('locationMessage', (url) => {
     console.log(url);
     const html = Mustache.render(locationTemplate, {
+        username: url.username,
         url: url.url,
         createdAt: moment(url.createdAt).format('H:mm')
     })

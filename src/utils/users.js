@@ -42,7 +42,10 @@ const removeUser = (id) => {
 // Gets user by id
 const getUser = (id) => {
     const foundUser = users.find((user) => user.id === id)
-    console.log(foundUser);
+    return {
+        username: foundUser.username,
+        room: foundUser.room
+    }
 }
 
 // Lists users in a specific room

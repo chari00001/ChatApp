@@ -42,8 +42,9 @@ button {
     padding: 12px;
     background: #7C5CBF;
     border: none;
+    border-radius: 10px;
     color: white;
-    font-size: 16px;
+    font-size: 12px;
     transition: background .3s ease;
 }
 

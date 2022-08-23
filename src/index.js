@@ -44,40 +44,42 @@ io.on('connection', (socket) => {
         // Connect to a specific room
         socket.join(user.room)
 
-        // Sending Welcome message to new connection (client)
-        socket.emit('message', generateMessage('Welcome!'))
+        // Sending Welcome message to new connection (client) as Bot
+        socket.emit('message', generateMessage('Bot', 'Welcome!'))
 
         // Broadcast sends data to specific room except the one that sends the data
-        socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} has joined!`))
+        socket.broadcast.to(user.room).emit('message', generateMessage('Bot', `${user.username} has joined!`))
 
         callback()
     })
 
-    // Receiving event with message value from client and emitting it back to all connections
+    // Receiving event with message value from client and emitting it back to all members in room
     socket.on('sendMessage', (message, callback) => {
+        const { username, room } = getUser(socket.id)
         const filter = new Filter()
 
         if(filter.isProfane(message)){
           return callback('Watch your profanity.')  
         }
-        io.emit('message', generateMessage(message))
+        io.to(room).emit('message', generateMessage(username, message))
         // Acknowledgement callback
         callback()
     })
 
-    // Receiving coordinates from client, transform it into google maps link, then send link back to all connections
+    // Receiving coordinates from client, transform it into google maps link, then send link back to all members in room
     socket.on('sendLocation', (coords, callback) => {
-        io.emit("locationMessage", generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
+        const { username, room } = getUser(socket.id)
+        io.to(room).emit("locationMessage", generateLocationMessage(username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
         // Acknowledgement callback
         callback()
     })
 
     // On a user disconnection, send message to all other users
     socket.on('disconnect', () => {
-        // On disconnection, remove user and if there is a removed user send a message to all connections
+        // On disconnection, remove user and if there is a removed user send a message to all members in room
         const user = removeUser(socket.id)
         if (user) {
-            io.to(user.room).emit('message', generateMessage(`${user.username} has left.`))
+            io.to(user.room).emit('message', generateMessage('Bot', `${user.username} has left.`))
         }
     })
 })
