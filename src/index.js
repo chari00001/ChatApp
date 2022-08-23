@@ -50,6 +50,12 @@ io.on('connection', (socket) => {
         // Broadcast sends data to specific room except the one that sends the data
         socket.broadcast.to(user.room).emit('message', generateMessage('Bot', `${user.username} has joined!`))
 
+        // Adds new connected user to user list
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
+
         callback()
     })
 
@@ -80,6 +86,11 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id)
         if (user) {
             io.to(user.room).emit('message', generateMessage('Bot', `${user.username} has left.`))
+            // On disconnection refreshes user list after removing a user disconnected
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            })
         }
     })
 })

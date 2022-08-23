@@ -14,7 +14,8 @@
 
 
         <div class="chat">
-            <div class="chat__sidebar">
+            <!-- Rendering sidebar here -->
+            <div id="sidebar" class="chat__sidebar">
 
             </div>
             <div class="chat__main">
@@ -35,6 +36,8 @@
         </div>
 
         Chat App
+
+        <!-- TEMPLATES -->
 
         <!-- Rendering dynamic messages with timestamp -->
         <script id="message-template" type="text/html">
@@ -58,6 +61,17 @@
                     <a href="{{ url }}" target="_blank">Location</a>
                 </p>
             </div>
+        </script>
+
+        <!-- Rendering user list -->
+        <script id="sidebar-template" type="text/html">
+            <h1 class="room-title">{{ room }}</h2>
+            <h2 class="list-title">Users</h3>
+            <ul class="users">
+                {{#users}}
+                    <li>{{username}}</li>
+                {{/users}}
+            </ul>
         </script>
 
         <!-- socket.io.js is socket.io for client side, chat.js has access to socket.io.js -->

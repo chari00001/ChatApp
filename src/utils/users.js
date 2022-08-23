@@ -52,7 +52,7 @@ const getUser = (id) => {
 const getUsersInRoom = (room) => {
     room = room.trim().toLowerCase()
     const foundUsers = users.filter((user) => user.room === room)
-    console.log(foundUsers);
+    return foundUsers
 }
 
 module.exports = {
