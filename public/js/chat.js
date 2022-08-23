@@ -17,6 +17,30 @@ const sidebarTemplate = document.getElementById('sidebar-template').innerHTML
 // Getting query string, parsing it and destructuring as username and room
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true } )
 
+// Autoscroll to bottom
+const autoscroll = () => {
+    // New message element
+    const $newMessage = $messages.lastElementChild
+
+    // Height of the new message
+    const newMessageStyles = getComputedStyle($newMessage)
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    // Visible Height
+    const visibleHeight = $messages.offsetHeight
+
+    // Height of messages container
+    const containerHeight = $messages.scrollHeight
+
+    // How far have i scrolled
+    const scrollOffset = $messages.scrollTop + visibleHeight
+
+    if(containerHeight - newMessageHeight <= scrollOffset){
+        $messages.scrollTop = $messages.scrollHeight
+    }
+}
+
 // Receiving message event with message variable, then printing it to the console
 socket.on('message', (message) => {
     console.log(message);
@@ -28,6 +52,7 @@ socket.on('message', (message) => {
         createdAt: moment(message.createdAt).format('H:mm')
     })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 // Rendering location with mustache, adding setting href to url, then adding it back to messages 
@@ -39,6 +64,7 @@ socket.on('locationMessage', (url) => {
         createdAt: moment(url.createdAt).format('H:mm')
     })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 // 
